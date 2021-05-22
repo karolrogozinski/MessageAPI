@@ -44,11 +44,15 @@ async def messages():
 @app.get("/messages/{message_id}")
 async def get_message(message_id: int):
     message = app.db_connection.execute("""
-        SELECT Owner, Title, Text FROM Messages WHERE MessageID=?;
-        UPDATE Messages SET Counter = Counter + 1 WHERE MessageID=?
-        """, (message_id, message_id)).fetchone()
-    app.db_connection.commit()
+        SELECT Owner, Title, Text, Counter FROM Messages WHERE MessageID=?
+        """, (message_id)).fetchone()
     if not message:
         raise HTTPException(status_code=404, detail="Not found")
-    return {"owner": message[0], "title:": message[1], "text": message[2]}
+
+    app.db_connection.execute("""
+        UPDATE Messages SET Counter = Counter + 1 WHERE MessageID=?
+        """, (message_id))
+    app.db_connection.commit()
+
+    return {"owner": message[0], "title:": message[1], "text": message[2], "counter": message[3]}
 
