@@ -39,4 +39,4 @@ async def messages():
     messages = app.db_connection.execute("""
         SELECT Owner, Title, Counter FROM Messages
         """).fetchall()
-    return messages
+    return [{"owner": x[0], "title": x[1], "counter": x[2]} for x in messages]
