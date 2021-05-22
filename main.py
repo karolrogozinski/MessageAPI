@@ -26,7 +26,6 @@ app = FastAPI()
 @app.on_event("startup")
 async def startup():
     app.db_connection = sqlite3.connect("messages.db")
-    app.db_connection.text_factory = lambda b: b.decode(errors="ignore")
 
 
 @app.on_event("shutdown")
@@ -40,3 +39,15 @@ async def messages():
         SELECT Owner, Title, Counter FROM Messages
         """).fetchall()
     return [{"owner": x[0], "title": x[1], "counter": x[2]} for x in messages]
+
+
+app.get("/messages/{message_id}")
+async def get_message(message_id: int):
+    message = app.db_connecion.execute("""
+        SELECT Owner, Title, Text FROM Messages WHERE MessageID=?;
+        UPDATE Messages SET Counter = Counter + 1 WHERE MessageID=?
+        """, (message_id, message_id)).fetchone()
+    if not message:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"owner": message[0], "title:": message[1], "text": message[2]}
+
