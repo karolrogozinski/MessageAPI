@@ -41,7 +41,7 @@ async def messages():
     return [{"owner": x[0], "title": x[1], "counter": x[2]} for x in messages]
 
 
-app.get("/messages/{message_id}")
+@app.get("/messages/{message_id}")
 async def get_message(message_id: int):
     message = app.db_connecion.execute("""
         SELECT Owner, Title, Text FROM Messages WHERE MessageID=?;
