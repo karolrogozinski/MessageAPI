@@ -107,8 +107,8 @@ async def delete_message(message_id: int, session_token: str = Cookie(None)):
     # Check if user is logged in
     #
     if session_token not in app.session_tokens:
-        #raise HTTPException(status_code=403, detail="Unathorised")
-        return {"session": session_token, "tokens": app.session_tokens}
+        raise HTTPException(status_code=403, detail="Unathorised")
+        #return {"session": session_token, "tokens": app.session_tokens}
 
     #
     # Check if message exist
@@ -122,7 +122,7 @@ async def delete_message(message_id: int, session_token: str = Cookie(None)):
     #
     # Check if user is message owner
     #
-    if encrypt(owner) != session_token:
+    if encrypt(message[0]) != session_token:
         raise HTTPException(status_code=403, detail="You are not the owner")
 
     #
