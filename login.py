@@ -11,8 +11,8 @@ def encrypt(string: str) -> str:
 
 
 def check_login(email: str, password: str, credentials: List[str]) -> str:
-    if credentials[0] != email:
+    if encrypt(credentials[0]) != email:
         raise HTTPException(status_code=401, detail="Incorrect email address")
-    if credentials[1] != password:
+    if encrypt(credentials[1]) != password:
         raise HTTPException(status_code=401, detail="Incorrect password")
-    return encrypt(email)
+    return email
