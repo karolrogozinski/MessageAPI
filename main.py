@@ -27,7 +27,7 @@ async def shutdown():
 #
 # Login via email
 #
-@app.post("/login/{email}", status_code=201)
+@app.get("/login/{email}")
 async def login(email: str, response: Response):
     #
     # Generate one-time password and send it to user
