@@ -35,7 +35,9 @@ async def send_email(email: str, response: Response):
     # Generate one-time password, send it to user and redirect to login
     #
     password = await send_email(email)
-    return RedirectResponse("", 303)
+    email = encode(email)
+    password = encode(password)
+    return RedirectResponse(f"/login?email={email}&password={password}", 303)
 
 
 #
