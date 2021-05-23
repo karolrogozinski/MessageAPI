@@ -3,6 +3,7 @@ import asyncio
 
 from fastapi import Cookie, FastAPI, HTTPException, Query, Request, Response, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
 
 from typing import List
