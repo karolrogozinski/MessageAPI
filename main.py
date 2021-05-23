@@ -102,7 +102,7 @@ async def get_message(message_id: int) -> dict:
 # You have to be owner to do that
 #
 @app.get("/messages/{message_id}/delete")
-async def delete_message(message_id: int, session_token: str = Cookie(None)):
+def delete_message(message_id: int, session_token: str = Cookie(None)):
     #
     # Check if user is logged in
     #
