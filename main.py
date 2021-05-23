@@ -11,8 +11,16 @@ from mails import send_email
 from login import get_user_token, encrypt
 
 
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+security = HTTPBasic()
+
+
 app = FastAPI()
 app.session_tokens: List[str] = []
+
+@app.get("/users/me")
+def read_current_user(credentials: HTTPBasicCredentials = Depends(security)):
+    return {"username": credentials.username, "password": credentials.password}
 
 
 @app.on_event("startup")
