@@ -16,7 +16,7 @@ conf = ConnectionConfig(
 
 
 def generate_password() -> str:
-    return ''.join(random.sample('QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890', 32))
+    return ''.join(random.sample('QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890!@#$%^&*()', 32))
 
 
 async def send_email(email: str) -> str:
@@ -24,7 +24,7 @@ async def send_email(email: str) -> str:
     message = MessageSchema(
         subject = "MessageAPI Auth",
         recipients = [email],
-        body = f'Hello!\nYour one-time password to MessageAPI is:\n{password}',
+        body = f'Hello! Your one-time password to MessageAPI is: {password}',
         subtype = "html"
     )
     fm = FastMail(conf)
