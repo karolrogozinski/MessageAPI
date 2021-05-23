@@ -95,3 +95,40 @@ async def get_message(message_id: int) -> dict:
         raise HTTPException(status_code=404, detail="Not found")
 
     return {"owner": message[0], "title:": message[1], "text": message[2], "counter": message[3]}
+
+
+#
+# Delete message with given id
+# You have to be owner to do that
+#
+@app.delete("/messages/{message_id}/delete")
+async def delete_message(message_id: int, response: Response, session_token: str = Cookie(None)):
+    #
+    # Check if user is logged in
+    #
+    if session_token not in app.session_tokens:
+        raise HTTPException(status_code=403, detail="Unathorised")
+
+    #
+    # Check if message exist
+    #
+    message = app.db_connection.execute("""
+        SELECT Owner, Title FROM Messages WHERE MessageID=?
+        """, (str(message_id))).fetchone()
+    if not message:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    #
+    # Check if user is message owner
+    #
+    if encrypt(owner) != session_token:
+        raise HTTPException(status_code=403, detail="You are not the owner")
+
+    #
+    # Delete message
+    #
+    app.db_connection.execute("""
+        DELETE FROM Messages WHERE MessageID=?
+        """, str(message_id))
+    app.db_connecion.commit()
+    return {"deleted": message[1]}
