@@ -1,7 +1,7 @@
 import sqlite3
 import asyncio
 
-from fastapi import Cookie, FastAPI, HTTPException, Query, Request, Response
+from fastapi import Cookie, FastAPI, HTTPException, Query, Request, Response, Depends
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
