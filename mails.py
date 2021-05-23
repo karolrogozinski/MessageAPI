@@ -1,5 +1,6 @@
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 import random
+import asyncio
 
 
 conf = ConnectionConfig(
@@ -23,7 +24,7 @@ async def send_email(email: str) -> str:
     message = MessageSchema(
         subject = "MessageAPI Auth",
         recipients = [email],
-        body = f'Hello!/nYour one-time password to MessageAPI is:/n{password}',
+        body = f'Hello!\nYour one-time password to MessageAPI is:\n{password}',
         subtype = "html"
     )
     fm = FastMail(conf)

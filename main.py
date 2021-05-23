@@ -1,4 +1,5 @@
 import sqlite3
+import asyncio
 
 from fastapi import Cookie, FastAPI, HTTPException, Query, Request, Response
 from fastapi.responses import HTMLResponse
@@ -25,7 +26,7 @@ async def shutdown():
 
 @app.get("/login/{email}")
 async def login(email: str):
-    send_email(email)
+    password = asyncio.run(send_email(email))
     return {"message": "email has been sent"}
 
 
