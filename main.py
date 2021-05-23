@@ -42,7 +42,7 @@ async def send_email(email: str, response: Response):
 # Login window
 #
 @app.get("/login")
-async def login(email: str, password: str, response: Response, credentials: HTTPBasicCredentials = Depends(security)):
+def login(email: str, password: str, response: Response, credentials: HTTPBasicCredentials = Depends(security)):
     #
     # Add new session token and set Cookie
     #
