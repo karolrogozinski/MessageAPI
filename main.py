@@ -107,8 +107,9 @@ async def delete_message(message_id: int, session_token: str = Cookie(None)):
     # Check if user is logged in
     #
     if session_token not in app.session_tokens:
-        #raise HTTPException(status_code=403, detail="Unathorised")
-        return {"session": session_token, "tokens": app.session_tokens}
+        if session_token and not app.session_tokens:
+            return RedirectResponse(f"/messages/{message_id}/delete", 303)
+        raise HTTPException(status_code=403, detail="Unathorised")
 
     #
     # Check if message exist
