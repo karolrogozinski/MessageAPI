@@ -39,7 +39,7 @@ async def shutdown():
 async def login(email: str):
     message = MessageSchema(
         subject = "MessageAPI Auth"
-        recipients = email
+        recipients = str(email)
         body = "example email"
         subtype = "html"
     )
