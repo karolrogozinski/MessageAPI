@@ -35,7 +35,7 @@ async def shutdown():
 # Send email iwth password to given email
 #
 @app.get("/send_secrets/{email}")
-async def send_email(email: str):
+async def send_secrets(email: str):
     #
     # Generate one-time password, send it to user and redirect to login
     #
