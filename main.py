@@ -2,13 +2,13 @@ import sqlite3
 import asyncio
 
 from fastapi import Cookie, FastAPI, HTTPException, Query, Request, Response, Depends
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from pydantic import BaseModel
 
 from typing import List
 
 from mails import send_email
-from login import get_credentials, encrypt, check_login
+from login import encrypt, check_login
 
 
 app = FastAPI()
@@ -25,20 +25,26 @@ async def shutdown():
     app.db_connection.close()
 
 #
-# Login via email
+# Send email iwth password to given email
 #
-@app.get("/login/{email}")
-async def login(email: str, response: Response):
+@app.get("/send_secrets/{email}")
+async def send_email(email: str, response: Response):
     #
-    # Generate one-time password and send it to user
+    # Generate one-time password, send it to user and redirect to login
     #
     password = await send_email(email)
-    credentials = get_credentials()
-    session_token = check_login(email, password, credentials)
+    return RedirectResponse("", 303)
 
+
+#
+# Login window
+#
+@app.get("/login")
+async def login(email: str, password: str response: Response, credentials: HTTPBasicCredentials = Depends(security)):
     #
     # Add new session token and set Cookie
     #
+    session_token = check_login(email, password, credentials)
     app.session_tokens.append(session_token)
     response.set_cookie(key="session_token", value=session_token)
     return {"message": "Logged in"}
