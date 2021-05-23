@@ -4,12 +4,7 @@ from typing import List
 import hashlib
 
 
-security = HTTPBasic()
 secret_key = 'm3SS'
-
-
-def get_credentials(credentials: HTTPBasicCredentials = Depends(security)) -> str:
-    return credentials.username, credentials.password
 
 
 def encrypt(string: str) -> str:
