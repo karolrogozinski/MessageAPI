@@ -2,26 +2,15 @@ import sqlite3
 
 from fastapi import Cookie, FastAPI, HTTPException, Query, Request, Response
 from fastapi.responses import HTMLResponse
-from fastapi_mail import FastMail, MessageSchema,ConnectionConfig
 from pydantic import BaseModel
 
 from typing import List
 
+from mails import send_email
+
 
 app = FastAPI()
 app.secrets = []
-
-
-conf = ConnectionConfig(
-    MAIL_USERNAME = "message.api.practise@gmail.com",
-    MAIL_PASSWORD = "Message123.",
-    MAIL_FROM = "message.api.practise@gmail.com",
-    MAIL_PORT = 587,
-    MAIL_SERVER = "smtp.gmail.com",
-    MAIL_FROM_NAME= "MessageAPI",
-    MAIL_TLS = True,
-    MAIL_SSL = False
-)
 
 
 @app.on_event("startup")
@@ -36,14 +25,7 @@ async def shutdown():
 
 @app.get("/login/{email}")
 async def login(email: str):
-    message = MessageSchema(
-        subject = "MessageAPI Auth",
-        recipients = [email],
-        body = "example email",
-        subtype = "html"
-    )
-    fm = FastMail(conf)
-    await fm.send_message(message)
+    send_email(email)
     return {"message": "email has been sent"}
 
 
