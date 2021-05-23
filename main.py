@@ -26,7 +26,7 @@ async def shutdown():
 
 @app.get("/login/{email}")
 async def login(email: str):
-    password = asyncio.run(send_email(email))
+    password = await send_email(email)
     return {"message": "email has been sent"}
 
 
