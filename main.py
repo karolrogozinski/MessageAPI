@@ -44,7 +44,7 @@ async def login(email: str):
     )
     fm = FastMail(conf)
     await fm.send_message(message)
-    return {"message": "email has been sent"})
+    return {"message": "email has been sent"}
 
 
 @app.get("/messages")
