@@ -16,12 +16,14 @@ app = FastAPI()
 security = HTTPBasic()
 app.session_tokens = []
 
+
 #
 # Connect to database
 #
 @app.on_event("startup")
 async def startup():
     app.db_connection = sqlite3.connect("messages.db", check_same_thread=False)
+
 
 #
 # Close database connection
@@ -132,5 +134,5 @@ async def delete_message(message_id: int, session_token: str = Cookie(None)):
     app.db_connection.execute("""
         DELETE FROM Messages WHERE MessageID=?
         """, str(message_id))
-    app.db_connecion.commit()
+    app.db_connection.commit()
     return {"deleted": message[1]}
