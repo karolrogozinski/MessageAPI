@@ -33,7 +33,7 @@ async def login(email: str, response: Response):
     # Generate one-time password and send it to user
     #
     password = await send_email(email)
-    credentials = Depends(get_credentials)
+    credentials = get_credentials()
     session_token = check_login(email, password, credentials)
 
     #
