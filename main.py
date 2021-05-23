@@ -46,7 +46,7 @@ async def login(email: str, password: str, response: Response, credentials: HTTP
     #
     # Add new session token and set Cookie
     #
-    session_token = check_login(email, password, credentials)
+    session_token = check_login(email, password, [credentials.username, credentials.password])
     app.session_tokens.append(session_token)
     response.set_cookie(key="session_token", value=session_token)
     return {"message": "Logged in"}
