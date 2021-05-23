@@ -21,7 +21,7 @@ app.session_tokens: List[str] = []
 #
 @app.on_event("startup")
 async def startup():
-    app.db_connection = sqlite3.connect("messages.db")
+    app.db_connection = sqlite3.connect("messages.db", check_same_thread=False)
 
 #
 # Close database connection
