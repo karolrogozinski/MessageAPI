@@ -34,7 +34,7 @@ async def login(email: str, response: Response):
     #
     password = await send_email(email)
     credentials = Depends(get_credentials)
-    session_token = ckeck_login(email, password, credentials)
+    session_token = check_login(email, password, credentials)
 
     #
     # Add new session token and set Cookie
