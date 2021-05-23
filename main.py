@@ -16,21 +16,26 @@ app = FastAPI()
 security = HTTPBasic()
 app.session_tokens: List[str] = []
 
-
+#
+# Connect to database
+#
 @app.on_event("startup")
 async def startup():
     app.db_connection = sqlite3.connect("messages.db")
 
-
+#
+# Close database connection
+#
 @app.on_event("shutdown")
 async def shutdown():
     app.db_connection.close()
+
 
 #
 # Send email iwth password to given email
 #
 @app.get("/send_secrets/{email}")
-async def send_email(email: str, response: Response):
+async def send_email(email: str):
     #
     # Generate one-time password, send it to user and redirect to login
     #
