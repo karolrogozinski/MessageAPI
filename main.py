@@ -38,9 +38,9 @@ async def shutdown():
 @app.get("/login/{email}")
 async def login(email: str):
     message = MessageSchema(
-        subject = "MessageAPI Auth"
-        recipients = [email]
-        body = "example email"
+        subject = "MessageAPI Auth",
+        recipients = [email],
+        body = "example email",
         subtype = "html"
     )
     fm = FastMail(conf)
