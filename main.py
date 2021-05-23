@@ -49,7 +49,7 @@ async def send_secrets(email: str):
 # Login window
 #
 @app.get("/login")
-def login(email: str, password: str, response: Response, credentials: HTTPBasicCredentials = Depends(security)):
+async def login(email: str, password: str, response: Response, credentials: HTTPBasicCredentials = Depends(security)):
     #
     # Add new session token and set Cookie
     #
@@ -102,7 +102,7 @@ async def get_message(message_id: int) -> dict:
 # You have to be owner to do that
 #
 @app.get("/messages/{message_id}/delete")
-def delete_message(message_id: int, session_token: str = Cookie(None)):
+async def delete_message(message_id: int, session_token: str = Cookie(None)):
     #
     # Check if user is logged in
     #
