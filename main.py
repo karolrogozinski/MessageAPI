@@ -8,19 +8,11 @@ from pydantic import BaseModel
 from typing import List
 
 from mails import send_email
-from login import get_user_token, encrypt
-
-
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
-security = HTTPBasic()
+from login import get_credentials, encrypt, check_login
 
 
 app = FastAPI()
 app.session_tokens: List[str] = []
-
-@app.get("/users/me")
-def read_current_user(credentials: HTTPBasicCredentials = Depends(security)):
-    return {"username": credentials.username, "password": credentials.password}
 
 
 @app.on_event("startup")
@@ -41,7 +33,8 @@ async def login(email: str, response: Response):
     # Generate one-time password and send it to user
     #
     password = await send_email(email)
-    session_token = get_user_token(email, password)
+    credentials = Depends(get_credentials)
+    session_token = ckeck_login(email, password, credentials)
 
     #
     # Add new session token and set Cookie
