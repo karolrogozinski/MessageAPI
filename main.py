@@ -20,8 +20,7 @@ conf = ConnectionConfig(
     MAIL_SERVER = "smtp.gmail.com",
     MAIL_FROM_NAME= "MessageAPI",
     MAIL_TLS = True,
-    MAIL_SSL = False,
-    USE_CREDENTIALS = True
+    MAIL_SSL = False
 )
 
 
