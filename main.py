@@ -14,7 +14,7 @@ from login import encrypt, check_login
 
 app = FastAPI()
 security = HTTPBasic()
-app.session_tokens: List[str] = []
+app.session_tokens = ["token"]
 
 #
 # Connect to database
