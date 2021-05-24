@@ -1,11 +1,12 @@
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 import random
 import asyncio
+import os
 
 
 conf = ConnectionConfig(
     MAIL_USERNAME = "message.api.practise@gmail.com",
-    MAIL_PASSWORD = "Message123.",
+    MAIL_PASSWORD = os.getenv("PASSWORD"),
     MAIL_FROM = "message.api.practise@gmail.com",
     MAIL_PORT = 587,
     MAIL_SERVER = "smtp.gmail.com",
