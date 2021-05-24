@@ -5,3 +5,7 @@ class Message(BaseModel):
     owner: str
     title: str
     text: str
+
+
+class MessageText(BaseModel):
+    text: str

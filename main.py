@@ -151,16 +151,22 @@ async def create_message(message: Message, session_token: str = Cookie(None)):
         raise HTTPException(status_code=403, detail="Unathorised")
 
     #
-    # Check if user is the owner
+    # Check if all parameters was specified
     #
-    if encrypt(message.owner) != session_token:
-        raise HTTPException(status_code=403, detail="You do not have access to create message as this user")
+    if not (message.owner and message.title and message.text):
+        raise HTTPException(status_code=402, detail="All parameters have to be specified")
 
     #
     # Check is message has alllowed length
     #
     if len(message.text) > 160:
-        raise HTTPException(status_code=402, datail="Your message is too long")
+        raise HTTPException(status_code=402, detail="Your message is too long")
+
+    #
+    # Check if user is the owner
+    #
+    if encrypt(message.owner) != session_token:
+        raise HTTPException(status_code=403, detail="You do not have access to create message as this user")
 
     #
     # Add message to database
