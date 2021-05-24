@@ -183,7 +183,7 @@ async def create_message(message: Message, session_token: str = Cookie(None)):
 # You have to be owner to do that
 #
 @app.post("/messages/{message_id}/edit")
-async def edit_message(message_text: MessageText, session_token: str = Cookie(None)):
+async def edit_message(message_text: MessageText, message_id: int, session_token: str = Cookie(None)):
     #
     # Check if user is logged in
     #
@@ -212,6 +212,6 @@ async def edit_message(message_text: MessageText, session_token: str = Cookie(No
     #
     app.db_connection.execute("""
         UPDATE Messages SET Text=? WHERE MessageID=?
-        """, (str(message_text.text, message_id)))
+        """, (str(message_text.text, str(message_id))))
     app.db_connection.commit()
     return {"edited": message[1]}
