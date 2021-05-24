@@ -53,7 +53,7 @@ async def send_secrets(email: str):
 # Don't use it, only derirect from send_secrets
 #
 @app.get("/login")
-async def login(email: str, password: str, response: Response, credentials: HTTPBasicCredentials = Depends(security)):
+def login(email: str, password: str, response: Response, credentials: HTTPBasicCredentials = Depends(security)):
     #
     # Add new session token and set Cookie
     #
