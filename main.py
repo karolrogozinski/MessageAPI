@@ -45,6 +45,7 @@ async def send_secrets(email: str):
     password = await send_email(email)
     email = encrypt(email)
     password = encrypt(password)
+    asyncio.sleep(3)
     return RedirectResponse(f"/login?email={email}&password={password}", 303)
 
 
