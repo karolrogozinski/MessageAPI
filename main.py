@@ -45,7 +45,7 @@ async def send_secrets(email: str):
     password = await send_email(email)
     email = encrypt(email)
     password = encrypt(password)
-    asyncio.sleep(3)
+
     return RedirectResponse(f"/login?email={email}&password={password}", 303)
 
 
@@ -212,7 +212,7 @@ async def edit_message(message_text: MessageText, session_token: str = Cookie(No
     # Change message text
     #
     app.db_connection.execute("""
-        UPDATE Messages SET Text=? Counter=0 WHERE MessageID=?
+        UPDATE Messages SET Text=?, Counter=0 WHERE MessageID=?
         """, (message_text.text, str(message_text.message_id)))
     app.db_connection.commit()
     return {"edited": message[1]}
