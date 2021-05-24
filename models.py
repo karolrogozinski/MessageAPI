@@ -8,4 +8,5 @@ class Message(BaseModel):
 
 
 class MessageText(BaseModel):
+    message_id: int
     text: str

@@ -182,8 +182,8 @@ async def create_message(message: Message, session_token: str = Cookie(None)):
 # Put new text in existing message
 # You have to be owner to do that
 #
-@app.post("/messages/{message_id}/edit")
-async def edit_message(message_text: MessageText, message_id: int, session_token: str = Cookie(None)):
+@app.post("/messages/edit")
+async def edit_message(message_text: MessageText, session_token: str = Cookie(None)):
     #
     # Check if user is logged in
     #
@@ -195,7 +195,7 @@ async def edit_message(message_text: MessageText, message_id: int, session_token
     #
     message = app.db_connection.execute("""
         SELECT Owner, Title FROM Messages WHERE MessageID=?
-        """, (str(message_id))).fetchone()
+        """, (str(message_text.message_id))).fetchone()
     if not message:
         raise HTTPException(status_code=404, detail="Not found")
 
@@ -212,6 +212,6 @@ async def edit_message(message_text: MessageText, message_id: int, session_token
     #
     app.db_connection.execute("""
         UPDATE Messages SET Text=? WHERE MessageID=?
-        """, (str(message_text.text, str(message_id))))
+        """, (str(message_text.text, str(message_text.message_id))))
     app.db_connection.commit()
     return {"edited": message[1]}
