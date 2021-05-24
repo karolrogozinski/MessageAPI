@@ -9,7 +9,7 @@ from typing import List
 
 from mails import send_email
 from login import encrypt, check_login
-from models import Message
+from models import Message, MessageText
 
 
 app = FastAPI()
@@ -140,7 +140,7 @@ async def delete_message(message_id: int, session_token: str = Cookie(None)):
 
 #
 # Create new message
-# Requies message owner, title and text
+# Requires Owner, Title and Text
 #
 @app.post("/messages/new", status_code=201)
 async def create_message(message: Message, session_token: str = Cookie(None)):
@@ -176,3 +176,42 @@ async def create_message(message: Message, session_token: str = Cookie(None)):
         """, (message.owner, message.title, message.text))
     app.db_connection.commit()
     return {"created": message.title}
+
+
+#
+# Put new text in existing message
+# You have to be owner to do that
+#
+@app.post("/messages/{message_id}/edit")
+async def edit_message(message_text: MessageText, session_token: str = Cookie(None)):
+    #
+    # Check if user is logged in
+    #
+    if session_token not in app.session_tokens:
+        raise HTTPException(status_code=403, detail="Unathorised")
+
+    #
+    # Check if message exist
+    #
+    message = app.db_connection.execute("""
+        SELECT Owner, Title FROM Messages WHERE MessageID=?
+        """, (str(message_id))).fetchone()
+    if not message:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    #
+    # Check if user is the owner and message is correct
+    #
+    if encrypt(message[0]) != session_token:
+        raise HTTPException(status_code=403, detail="You do not have access to edit this message")
+    if not message_text.text or len(message_text.text) > 160:
+        raise HTTPException(status_code=402, detail="Incorrect message text")
+
+    #
+    # Change message text
+    #
+    app.db_connection.execute("""
+        UPDATE Messages SET Text=? WHERE MessageID=?
+        """, (str(message_text.text, message_id)))
+    app.db_connection.commit()
+    return {"edited": message[1]}
