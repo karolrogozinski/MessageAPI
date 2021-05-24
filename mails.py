@@ -5,9 +5,9 @@ import os
 
 
 conf = ConnectionConfig(
-    MAIL_USERNAME = "message.api.practise@gmail.com",
+    MAIL_USERNAME = os.getenv("MAIL"),
     MAIL_PASSWORD = os.getenv("PASSWORD"),
-    MAIL_FROM = "message.api.practise@gmail.com",
+    MAIL_FROM = os.getenv("MAIL"),
     MAIL_PORT = 587,
     MAIL_SERVER = "smtp.gmail.com",
     MAIL_FROM_NAME= "MessageAPI",
