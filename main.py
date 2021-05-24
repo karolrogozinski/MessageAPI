@@ -4,12 +4,12 @@ import asyncio
 from fastapi import Cookie, FastAPI, HTTPException, Query, Request, Response, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from pydantic import BaseModel
 
 from typing import List
 
 from mails import send_email
 from login import encrypt, check_login
+from models import Message
 
 
 app = FastAPI()
@@ -103,14 +103,12 @@ async def get_message(message_id: int) -> dict:
 # Delete message with given id
 # You have to be owner to do that
 #
-@app.get("/messages/{message_id}/delete")
+@app.delete("/messages/{message_id}/delete")
 async def delete_message(message_id: int, session_token: str = Cookie(None)):
     #
     # Check if user is logged in
     #
     if session_token not in app.session_tokens:
-        # if session_token and not app.session_tokens:
-        #     return RedirectResponse(f"/messages/{message_id}/delete", 303)
         raise HTTPException(status_code=403, detail="Unathorised")
 
     #
@@ -136,3 +134,37 @@ async def delete_message(message_id: int, session_token: str = Cookie(None)):
         """, str(message_id))
     app.db_connection.commit()
     return {"deleted": message[1]}
+
+
+#
+# Create new message
+# Requies message owner, title and text
+#
+@app.post("messages/new", status_code=201)
+async def create_message(message: Message, session_token: str = Cookie(None)):
+    #
+    # Check if user is logged in
+    #
+    if session_token not in app.session_tokens:
+        raise HTTPException(status_code=403, detail="Unathorised")
+
+    #
+    # Check if user is the owner
+    #
+    if encrypt(message.owner) != session_token:
+        raise HTTPException(status_code=403, detail="You do not have access to create message as this user")
+
+    #
+    # Check is message has alllowed length
+    #
+    if len(message.text) > 160:
+        raise HTTPException(status_code=402, datail="Your message is too long")
+
+    #
+    # Add message to database
+    #
+    app.db_connection.execute("""
+        INSERT INTO Messages (Owner, Title, Text) VALUES (?, ?, ?)
+        """, (message.owner, message.title, message.text))
+    app.db_connection.commit()
+    return {"created": message.title}
