@@ -43,8 +43,8 @@ async def send_secrets(email: str):
     # Generate one-time password, send it to user and redirect to login
     #
     password = await send_email(email)
-    email = encrypt(email)
-    password = encrypt(password)
+    email = await encrypt(email)
+    password = await encrypt(password)
     return RedirectResponse(f"/login?email={email}&password={password}", 303)
 
 
