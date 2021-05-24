@@ -35,6 +35,7 @@ async def shutdown():
 
 #
 # Send email iwth password to given email
+# After that redirect to login window
 #
 @app.get("/send_secrets/{email}")
 async def send_secrets(email: str):
@@ -49,6 +50,7 @@ async def send_secrets(email: str):
 
 #
 # Login window
+# Don't use it, only derirect from send_secrets
 #
 @app.get("/login")
 async def login(email: str, password: str, response: Response, credentials: HTTPBasicCredentials = Depends(security)):
@@ -140,7 +142,7 @@ async def delete_message(message_id: int, session_token: str = Cookie(None)):
 # Create new message
 # Requies message owner, title and text
 #
-@app.post("messages/new", status_code=201)
+@app.post("/messages/new", status_code=201)
 async def create_message(message: Message, session_token: str = Cookie(None)):
     #
     # Check if user is logged in
