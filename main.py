@@ -112,7 +112,7 @@ async def delete_message(message_id: int, session_token: str = Cookie(None)):
     # Check if user is logged in
     #
     if session_token not in app.session_tokens:
-        raise HTTPException(status_code=403, detail="Unathorised")
+        raise HTTPException(status_code=403, detail="Unauthorized")
 
     #
     # Check if message exist
@@ -149,7 +149,7 @@ async def create_message(message: Message, session_token: str = Cookie(None)):
     # Check if user is logged in
     #
     if session_token not in app.session_tokens:
-        raise HTTPException(status_code=403, detail="Unathorised")
+        raise HTTPException(status_code=403, detail="Unauthorized")
 
     #
     # Check if all parameters was specified
@@ -183,13 +183,13 @@ async def create_message(message: Message, session_token: str = Cookie(None)):
 # Put new text in existing message
 # You have to be owner to do that
 #
-@app.post("/messages/edit")
+@app.post("/messages/edit", status_code=201)
 async def edit_message(message_text: MessageText, session_token: str = Cookie(None)):
     #
     # Check if user is logged in
     #
     if session_token not in app.session_tokens:
-        raise HTTPException(status_code=403, detail="Unathorised")
+        raise HTTPException(status_code=403, detail="Unauthorized")
 
     #
     # Check if message exist

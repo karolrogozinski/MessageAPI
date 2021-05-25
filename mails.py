@@ -4,23 +4,22 @@ import asyncio
 import os
 
 
-conf = ConnectionConfig(
-    MAIL_USERNAME = os.getenv("MAIL"),
-    MAIL_PASSWORD = os.getenv("PASSWORD"),
-    MAIL_FROM = os.getenv("MAIL"),
-    MAIL_PORT = 587,
-    MAIL_SERVER = "smtp.gmail.com",
-    MAIL_FROM_NAME= "MessageAPI",
-    MAIL_TLS = True,
-    MAIL_SSL = False
-)
-
-
 def generate_password() -> str:
     return ''.join(random.sample('QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890!@#$%^&*()', 32))
 
 
 async def send_email(email: str) -> str:
+    conf = ConnectionConfig(
+        MAIL_USERNAME = os.getenv("MAIL"),
+        MAIL_PASSWORD = os.getenv("PASSWORD"),
+        MAIL_FROM = os.getenv("MAIL"),
+        MAIL_PORT = 587,
+        MAIL_SERVER = "smtp.gmail.com",
+        MAIL_FROM_NAME= "MessageAPI",
+        MAIL_TLS = True,
+        MAIL_SSL = False
+    )
+
     password = generate_password()
     message = MessageSchema(
         subject = "MessageAPI Auth",

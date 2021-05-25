@@ -1,10 +1,9 @@
 from fastapi import Depends, FastAPI, HTTPException, status
 from typing import List
 import hashlib
-import os
 
 
-secret_key = os.getenv("SECRET_KEY")
+secret_key = "m3SS"
 
 
 def encrypt(string: str) -> str:
