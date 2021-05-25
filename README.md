@@ -93,5 +93,8 @@ Delete method to remove message with given ```message_id```. Possible exceptions
 * ``` 404, "Not found" ``` - Message with given ```id``` not found
 * ``` 403, "You are not the owner" ``` - Logged as different user than message owner
 
+## Tests
+To run unit test you have to use clean database (included here). Some tests will not pass with more data.
+
 ## License
 This project is licensed under the terms of the MIT license.
